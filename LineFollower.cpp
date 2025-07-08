@@ -1,9 +1,10 @@
 #include "LineFollower.h"
 
-LineFollower::LineFollower(uint16_t maxSpeed)
-  : maxSpeed(maxSpeed) // Slaat de maximale snelheid op
+// Constructor die een gedeelde lijnsensor ontvangt
+LineFollower::LineFollower(Zumo32U4LineSensors& sharedSensors, uint16_t maxSpeed)
+  : lineSensors(sharedSensors), maxSpeed(maxSpeed) // Sensor en snelheid opslaan
 {
-  lineSensors.initFiveSensors(); // Initialiseer de 5 lijnsensoren
+  lineSensors.initFiveSensors(); // Initialiseer de gedeelde lijnsensor
 }
 
 void LineFollower::calibrate()

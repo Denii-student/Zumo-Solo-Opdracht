@@ -17,6 +17,9 @@ bool ColorSensor::detectBrown()
 
   uint16_t average = total / numSensors;
 
+  // 🔍 Debug: print gemiddelde waarde naar de Serial Monitor
+  Serial.println(average);
+
   if (average > brownMin && average < brownMax)
   {
     return true;  // Bruine lijn gedetecteerd

@@ -6,8 +6,8 @@
 class LineFollower
 {
 public:
-    LineFollower(uint16_t maxSpeed = 400);
-    // Constructor: stelt maximale snelheid in (standaard 400)
+    LineFollower(Zumo32U4LineSensors& sharedSensors, uint16_t maxSpeed = 400);
+    // Constructor: gebruikt gedeelde sensor en stelt max snelheid in
 
     void calibrate();
     // Laat de robot heen en weer draaien en kalibreert de lijnsensoren
@@ -19,8 +19,8 @@ public:
     // Stopt de robot door beide motorsnelheden op 0 te zetten
 
 private:
-    Zumo32U4LineSensors lineSensors;
-    // Lijnsensor-array van de Zumo (5 sensoren)
+    Zumo32U4LineSensors& lineSensors;
+    // Gedeelde referentie naar de lijnsensor-array
 
     Zumo32U4Motors motors;
     // Motorcontroller van de Zumo

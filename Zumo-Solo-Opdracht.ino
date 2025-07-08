@@ -7,22 +7,18 @@ ColorSensor kleurSensor;
 
 void setup()
 {
-  // Start de calibratie op de groene lijn (of zwart als je dat gebruikt)
-  lijnvolger.calibrate();
+  Serial.begin(9600);              // Start de seriële monitor voor debugging
+  lijnvolger.calibrate();          // Start de calibratie op de groene lijn
 }
 
 void loop()
 {
   // Als een bruine lijn wordt gedetecteerd:
   if (kleurSensor.detectBrown()) {
-    // Stop de robot via de publieke methode
-    lijnvolger.stop();
-
-    // Pauze zodat je ziet dat hij gestopt is (10 seconden)
-    delay(10000);
+    lijnvolger.stop();             // Stop de robot via publieke methode
+    delay(10000);                  // Wacht 10 seconden zodat je het kunt zien
   }
   else {
-    // Anders gewoon de lijn volgen
-    lijnvolger.followLine();
+    lijnvolger.followLine();       // Volg de lijn als er geen bruin is
   }
 }

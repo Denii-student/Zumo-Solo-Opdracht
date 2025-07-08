@@ -15,6 +15,9 @@ public:
     void followLine();
     // Laat de robot de lijn volgen met een PID-regeling
 
+    void stop();
+    // Stopt de robot door beide motorsnelheden op 0 te zetten
+
 private:
     Zumo32U4LineSensors lineSensors;
     // Lijnsensor-array van de Zumo (5 sensoren)

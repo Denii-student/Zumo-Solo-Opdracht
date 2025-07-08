@@ -3,39 +3,44 @@
 
 #include <Zumo32U4.h>
 
+/*
+ * Klasse: LineFollower
+ * Doel: Laat de robot een lijn volgen met behulp van PID-regeling
+ * Gebruikt een gedeelde lijnsensor en stuurt de motoren aan op basis van lijnpositie
+ */
 class LineFollower
 {
 public:
     LineFollower(Zumo32U4LineSensors& sharedSensors, uint16_t maxSpeed = 400);
-    // Constructor: gebruikt gedeelde sensor en stelt max snelheid in
+    // Constructor: gebruikt gedeelde sensor en stelt max snelheid in (standaard 400)
 
     void calibrate();
-    // Laat de robot heen en weer draaien en kalibreert de lijnsensoren
+    // Draait op eigen plek en kalibreert de lijnsensor
 
     void followLine();
-    // Laat de robot de lijn volgen met een PID-regeling
+    // Laat de robot een lijn volgen met een PID-regeling
 
     void stop();
-    // Stopt de robot door beide motorsnelheden op 0 te zetten
+    // Zet beide motoren stil
 
 private:
     Zumo32U4LineSensors& lineSensors;
-    // Gedeelde referentie naar de lijnsensor-array
+    // Referentie naar gedeelde lijnsensor (komt uit main)
 
     Zumo32U4Motors motors;
-    // Motorcontroller van de Zumo
+    // Zumo-motorcontroller
 
     static const uint8_t numSensors = 5;
-    // Aantal lijnsensoren op de Zumo
+    // Aantal sensoren in de lijnsensor-array
 
     unsigned int sensorValues[numSensors];
-    // Gekalibreerde waarden van de lijnsensoren
+    // Array met huidige sensorwaarden (voor PID en debug)
 
     int16_t lastError = 0;
-    // Laatste foutwaarde (voor de D-term van de PID-regeling)
+    // Laatste foutwaarde van lijnpositie (voor D-term)
 
     uint16_t maxSpeed;
-    // Maximale snelheid van de motoren
+    // Maximale motorsnelheid (standaard 400)
 };
 
 #endif

@@ -58,3 +58,15 @@ void LineFollower::stop()
   // Zet beide motoren stil
   motors.setSpeeds(0, 0);
 }
+
+void LineFollower::spinLeft()
+{
+  // Laat de robot linksom draaien (bijv. voor kalibratie)
+  motors.setSpeeds(-200, 200);
+}
+
+void LineFollower::spinRight()
+{
+  // Laat de robot rechtsom draaien (bijv. voor kalibratie)
+  motors.setSpeeds(200, -200);
+}

@@ -7,15 +7,16 @@
  * Klasse: ColorSensor
  * Doel: Detecteert een bruine lijn onder de robot
  * Werkt op basis van reflectiewaarden van de 5 lijnsensoren van de Zumo
+ * Detectie is gebaseerd op gemiddelde reflectie én het aantal actieve sensoren
  */
 class ColorSensor
 {
 public:
     ColorSensor(Zumo32U4LineSensors& sharedSensors);
-    // Constructor: gebruikt gedeelde lijnsensor (al gekalibreerd via LineFollower)
+    // Constructor: gebruikt gedeelde lijnsensor die al gekalibreerd is via LineFollower
 
     bool detectBrown();
-    // Leest sensorwaarden en bepaalt of de robot boven een bruine lijn staat
+    // Retourneert true als een horizontale bruine lijn onder de robot wordt herkend
 
 private:
     Zumo32U4LineSensors& lineSensors;
@@ -25,11 +26,11 @@ private:
     // Aantal lijnsensoren op de Zumo
 
     unsigned int sensorValues[numSensors];
-    // Array met reflectiewaarden van de sensoren
+    // Sensorwaarden van de huidige meting
 
-    uint16_t brownMin = 300;
-    uint16_t brownMax = 700;
-    // Drempelwaarden voor bruine lijn (aanpasbaar)
+    uint16_t brownMin = 250;
+    uint16_t brownMax = 330;
+    // Op basis van jouw metingen: gemiddelde waarde voor bruin ligt tussen 250 en 330
 };
 
 #endif

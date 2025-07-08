@@ -1,9 +1,13 @@
 #include "LineFollower.h"
 #include "ColorSensor.h"
+#include <Zumo32U4.h>
 
-// Maak objecten aan voor lijnvolging en kleurdetectie
-LineFollower lijnvolger;
-ColorSensor kleurSensor;
+// Gedeelde lijnsensor aanmaken
+Zumo32U4LineSensors gedeeldeSensor;
+
+// Maak objecten aan met dezelfde sensor
+LineFollower lijnvolger(gedeeldeSensor);
+ColorSensor kleurSensor(gedeeldeSensor);
 
 void setup()
 {

@@ -3,17 +3,23 @@
 
 #include <Zumo32U4.h>
 
+/*
+ * Klasse: SumoBehavior
+ * Doel: Zoek en duw het blok uit de cirkel met behulp van infraroodsensoren.
+ */
 class SumoBehavior
 {
 public:
     SumoBehavior();
-    void engage(); // Start actief duwen
+    void engage();           // Start actief zoeken en duwen
+    bool isFinished();       // Geeft aan of sumo-actie is voltooid
 
 private:
     Zumo32U4Motors motors;
     Zumo32U4ProximitySensors proxSensors;
+    Zumo32U4LineSensors lineSensors;
 
-    void searchAndPush(); // detecteer blok en duw
+    bool finished = false;   // Vlag om te onthouden of robot klaar is
 };
 
-#endif
+#endif // SUMO_BEHAVIOR_H

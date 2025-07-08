@@ -6,7 +6,7 @@
 // ✅ Gedeelde lijnsensor wordt aangemaakt in main
 Zumo32U4LineSensors gedeeldeSensor;
 
-// ✅ Klassen krijgen allebei toegang tot dezelfde sensor
+// ✅ Klassen krijgen toegang tot dezelfde sensor
 LineFollower lijnvolger(gedeeldeSensor);
 ColorSensor kleurSensor(gedeeldeSensor);
 SumoBehavior sumoGedrag;
@@ -23,16 +23,17 @@ void loop()
 {
   if (inSumoMode)
   {
-    sumoGedrag.engage();             // Sumo modus: blok detecteren en duwen
+    sumoGedrag.engage();             // Start sumo-modus éénmalig
+    inSumoMode = false;              // Zorg dat engage() niet herhaald wordt
   }
   else if (kleurSensor.detectBrown())
   {
-    inSumoMode = true;               // Activeer sumo-modus
-    lijnvolger.stop();               // Voor de zekerheid stoppen voor overgang
-    delay(500);                      // Korte pauze voor overgang
+    inSumoMode = true;               // Zet sumo-modus actief
+    lijnvolger.stop();               // Stop eerst lijnvolging
+    delay(500);                      // Korte stabilisatiepauze
   }
   else
   {
-    lijnvolger.followLine();         // Volg lijn zolang bruin niet is gedetecteerd
+    lijnvolger.followLine();         // Volg lijn met PID
   }
 }

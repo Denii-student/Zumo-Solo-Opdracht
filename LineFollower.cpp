@@ -1,17 +1,17 @@
 #include "LineFollower.h"
 
-// Constructor die een gedeelde lijnsensor ontvangt
+// Constructor: ontvangt gedeelde lijnsensor en stelt max snelheid in
 LineFollower::LineFollower(Zumo32U4LineSensors& sharedSensors, uint16_t maxSpeed)
-  : lineSensors(sharedSensors), maxSpeed(maxSpeed) // Sensor en snelheid opslaan
+  : lineSensors(sharedSensors), maxSpeed(maxSpeed)
 {
-  lineSensors.initFiveSensors(); // Initialiseer de gedeelde lijnsensor
+  lineSensors.initFiveSensors(); // Initialiseer de sensorarray
 }
 
 void LineFollower::calibrate()
 {
-  delay(1000); // Kleine pauze voor de calibratie begint
+  delay(1000); // Wacht even voor calibratie begint
 
-  // Robot draait 2 rondjes (120 stappen), wisselend links/rechts
+  // Calibratie: draai 2 rondjes (120 stappen) en neem sensorwaarden op
   for (uint16_t i = 0; i < 120; i++)
   {
     if (i > 30 && i <= 90)
@@ -23,7 +23,7 @@ void LineFollower::calibrate()
       motors.setSpeeds(200, -200); // Draai rechtsom
     }
 
-    lineSensors.calibrate(); // Neem sensorwaarden op voor calibratie
+    lineSensors.calibrate(); // Registreer sensorwaarden
   }
 
   motors.setSpeeds(0, 0); // Stop na calibratie
@@ -31,30 +31,30 @@ void LineFollower::calibrate()
 
 void LineFollower::followLine()
 {
-  // Lees de positie van de lijn (2000 = midden)
+  // Lees lijnpositie: 0 = helemaal links, 4000 = helemaal rechts, 2000 = midden
   int16_t position = lineSensors.readLine(sensorValues);
 
-  // Bereken fout tussen werkelijke en gewenste positie
+  // Bereken afwijking van het midden
   int16_t error = position - 2000;
 
-  // PID-regeling: P-term (1/4) + D-term (6 × verschil in error)
+  // Bereken snelheidsverschil met PID (alleen P & D)
   int16_t speedDifference = error / 4 + 6 * (error - lastError);
+  lastError = error;
 
-  lastError = error; // Sla huidige error op voor volgende loop
-
-  // Stel motorsnelheden in
+  // Stel linker- en rechtersnelheid in
   int16_t leftSpeed = (int16_t)maxSpeed + speedDifference;
   int16_t rightSpeed = (int16_t)maxSpeed - speedDifference;
 
-  // Zorg dat de snelheid binnen 0 en maxSpeed blijft
+  // Beperk snelheden tot geldige range
   leftSpeed = constrain(leftSpeed, 0, (int16_t)maxSpeed);
   rightSpeed = constrain(rightSpeed, 0, (int16_t)maxSpeed);
 
-  motors.setSpeeds(leftSpeed, rightSpeed); // Zet motors aan
+  // Pas motoren aan
+  motors.setSpeeds(leftSpeed, rightSpeed);
 }
 
 void LineFollower::stop()
 {
-  // Zet beide motoren uit
+  // Zet beide motoren stil
   motors.setSpeeds(0, 0);
 }

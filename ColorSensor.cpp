@@ -1,16 +1,18 @@
 #include "ColorSensor.h"
 
-ColorSensor::ColorSensor()
+// Constructor die een gedeelde lijnsensor ontvangt (referentie)
+ColorSensor::ColorSensor(Zumo32U4LineSensors& sharedSensors)
+  : lineSensors(sharedSensors) // Koppel de referentie aan het interne veld
 {
-  lineSensors.initFiveSensors();
+  // Geen initFiveSensors() hier, want dat is al gedaan bij LineFollower
 }
 
 bool ColorSensor::detectBrown()
 {
-  // Lees de sensorwaarden met readLine() i.p.v. readCalibrated()
+  // Lees de sensorwaarden via de gedeelde sensor
   lineSensors.readLine(sensorValues);
 
-  // Optioneel: print de individuele waarden (voor debuggen)
+  // Optioneel: print individuele waarden (debug)
   Serial.print("Sensoren: ");
   uint16_t total = 0;
   for (uint8_t i = 0; i < numSensors; i++)
@@ -20,12 +22,12 @@ bool ColorSensor::detectBrown()
     total += sensorValues[i];
   }
 
-  // Bereken het gemiddelde
+  // Bereken gemiddelde waarde
   uint16_t average = total / numSensors;
   Serial.print("  Gemiddelde: ");
   Serial.println(average);
 
-  // Vergelijk met drempelwaarden voor bruin
+  // Controleer of het gemiddelde binnen het bruine bereik valt
   if (average > brownMin && average < brownMax)
   {
     return true;  // Bruine lijn gedetecteerd

@@ -28,8 +28,8 @@ private:
     unsigned int sensorValues[numSensors];
     // Sensorwaarden van de huidige meting
 
-    uint16_t brownMin = 250;
-    uint16_t brownMax = 330;
+    uint16_t brownMin = 300;
+    uint16_t brownMax = 700;
     // Op basis van jouw metingen: gemiddelde waarde voor bruin ligt tussen 250 en 330
 };
 

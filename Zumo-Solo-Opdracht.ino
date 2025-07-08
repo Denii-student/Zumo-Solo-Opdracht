@@ -15,8 +15,8 @@ void loop()
 {
   // Als een bruine lijn wordt gedetecteerd:
   if (kleurSensor.detectBrown()) {
-    // Stop de robot
-    lijnvolger.motors.setSpeeds(0, 0);
+    // Stop de robot via de publieke methode
+    lijnvolger.stop();
 
     // Pauze zodat je ziet dat hij gestopt is (10 seconden)
     delay(10000);

@@ -3,7 +3,6 @@
 ColorSensor::ColorSensor(Zumo32U4LineSensors& sharedSensors)
   : lineSensors(sharedSensors)
 {
-  // Geen initFiveSensors hier
 }
 
 bool ColorSensor::detectBrown()
@@ -17,5 +16,6 @@ bool ColorSensor::detectBrown()
   }
 
   uint16_t average = total / numSensors;
+
   return (average > brownMin && average < brownMax);
 }

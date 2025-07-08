@@ -11,7 +11,7 @@ void LineFollower::calibrate()
   delay(1000);
   for (uint16_t i = 0; i < 100; i++)
   {
-    lineSensors.calibrate(); // Jij beweegt hem handmatig over zwart
+    lineSensors.calibrate(); // Beweeg handmatig over zwarte lijn
     delay(20);
   }
 }

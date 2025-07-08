@@ -3,17 +3,13 @@
 
 #include <Zumo32U4.h>
 
-/*
- * Klasse: LineFollower
- * Doel: Laat de robot een lijn volgen met behulp van PID-regeling
- */
 class LineFollower
 {
 public:
     LineFollower(Zumo32U4LineSensors& sharedSensors, uint16_t maxSpeed = 400);
-    void calibrate();       // Kalibreert de lijnsensor (op zwart)
-    void followLine();      // Volgt de lijn met PID
-    void stop();            // Zet beide motoren stil
+    void calibrate();    // Kalibreert op zwarte lijn
+    void followLine();   // Volgt de lijn met PID
+    void stop();         // Stopt beide motoren
 
 private:
     Zumo32U4LineSensors& lineSensors;

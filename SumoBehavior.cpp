@@ -2,44 +2,83 @@
 
 SumoBehavior::SumoBehavior()
 {
-  proxSensors.initThreeSensors(); // Activeer de linker + rechter IR-sensor
+  proxSensors.initThreeSensors();
+  lineSensors.initFiveSensors();  // Initialiseer lijnsensoren voor zwarte randdetectie
+  finished = false;
 }
 
 void SumoBehavior::engage()
 {
+  if (finished) return; // voorkom dat engage opnieuw draait
+
+  // Stap 1: Rijd ±20 cm rechtdoor
+  motors.setSpeeds(300, 300);
+  delay(2000);
+  motors.setSpeeds(0, 0);
+
+  // Stap 2: Draai 360 graden in stapjes en kijk wanneer object wordt gezien
+  for (uint16_t i = 0; i < 36; i++)  // 36 × 100ms ≈ 360°
+  {
+    proxSensors.read();
+    uint16_t front = proxSensors.countsFrontWithLeftLeds();
+
+    Serial.print("IR front: ");
+    Serial.println(front);
+
+    if (front > 3)
+    {
+      delay(100);
+      motors.setSpeeds(400, 400);  // Ga direct op blok af
+      break;
+    }
+
+    // Geen object? Draai langzaam door
+    motors.setSpeeds(300, -300);
+    delay(100);
+  }
+
+  // Stap 3: Rijden richting object en corrigeren tot zwarte lijn
   while (true)
   {
-    searchAndPush();
+    proxSensors.read();
+    uint16_t left = proxSensors.countsLeftWithLeftLeds();
+    uint16_t right = proxSensors.countsRightWithRightLeds();
+
+    int16_t error = right - left;
+    int16_t baseSpeed = 300;
+    int16_t turnSpeed = error * 15;
+
+    int16_t leftSpeed = constrain(baseSpeed - turnSpeed, 0, 400);
+    int16_t rightSpeed = constrain(baseSpeed + turnSpeed, 0, 400);
+
+    motors.setSpeeds(leftSpeed, rightSpeed);
+
+    // Zwarte lijn detectie
+    unsigned int reflectie[5];
+    lineSensors.read(reflectie);
+
+    uint16_t gemiddelde = 0;
+    for (uint8_t i = 0; i < 5; i++)
+    {
+      gemiddelde += reflectie[i];
+    }
+    gemiddelde /= 5;
+
+    Serial.print("Reflectie gemiddelde: ");
+    Serial.println(gemiddelde);
+
+    if (gemiddelde > 700)  // Jouw grens voor zwart
+    {
+      motors.setSpeeds(0, 0);
+      finished = true; // Markeer als afgerond
+      break;
+    }
+
+    delay(50);
   }
 }
 
-void SumoBehavior::searchAndPush()
+bool SumoBehavior::isFinished()
 {
-  proxSensors.read(); // Lees linker & rechter sensor
-
-  uint16_t left = proxSensors.countsLeftWithLeftLED();
-  uint16_t right = proxSensors.countsRightWithRightLED();
-
-  if (left > 3 && right > 3)
-  {
-    // Object recht voor robot
-    motors.setSpeeds(200, 200);
-  }
-  else if (left > right)
-  {
-    // Object links → draai links
-    motors.setSpeeds(-100, 100);
-  }
-  else if (right > left)
-  {
-    // Object rechts → draai rechts
-    motors.setSpeeds(100, -100);
-  }
-  else
-  {
-    // Niets gedetecteerd → draai langzaam om te zoeken
-    motors.setSpeeds(100, -100);
-  }
-
-  delay(100);
+  return finished;
 }

@@ -51,3 +51,9 @@ void LineFollower::followLine()
 
   motors.setSpeeds(leftSpeed, rightSpeed); // Zet motors aan
 }
+
+void LineFollower::stop()
+{
+  // Zet beide motoren uit
+  motors.setSpeeds(0, 0);
+}

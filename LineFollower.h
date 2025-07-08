@@ -23,6 +23,12 @@ public:
     void stop();
     // Zet beide motoren stil
 
+    void spinLeft();
+    // Laat de robot linksom draaien (voor automatische kalibratie)
+
+    void spinRight();
+    // Laat de robot rechtsom draaien (voor automatische kalibratie)
+
 private:
     Zumo32U4LineSensors& lineSensors;
     // Referentie naar gedeelde lijnsensor (komt uit main)

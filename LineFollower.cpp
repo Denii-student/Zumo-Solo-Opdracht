@@ -4,14 +4,10 @@ LineFollower::LineFollower(uint16_t maxSpeed)
   : maxSpeed(maxSpeed) // Slaat de maximale snelheid op
 {
   lineSensors.initFiveSensors(); // Initialiseer de 5 lijnsensoren
-  loadCustomCharacters();        // Laad de grafiek-symbolen voor het OLED-display
 }
 
 void LineFollower::calibrate()
 {
-  display.clear();
-  display.print(F("Calibreren..."));
-
   delay(1000); // Kleine pauze voor de calibratie begint
 
   // Robot draait 2 rondjes (120 stappen), wisselend links/rechts
@@ -30,8 +26,6 @@ void LineFollower::calibrate()
   }
 
   motors.setSpeeds(0, 0); // Stop na calibratie
-
-  showSensorReadings(); // Laat gekalibreerde waarden zien op OLED tot knop A wordt ingedrukt
 }
 
 void LineFollower::followLine()
@@ -56,45 +50,4 @@ void LineFollower::followLine()
   rightSpeed = constrain(rightSpeed, 0, (int16_t)maxSpeed);
 
   motors.setSpeeds(leftSpeed, rightSpeed); // Zet motors aan
-}
-
-void LineFollower::loadCustomCharacters()
-{
-  static const char levels[] PROGMEM = {
-    0, 0, 0, 0, 0, 0, 0,
-    63, 63, 63, 63, 63, 63, 63
-  };
-
-  for (uint8_t i = 0; i < 7; i++)
-  {
-    display.loadCustomCharacter(levels + i, i);
-  }
-}
-
-void LineFollower::printBar(uint8_t height)
-{
-  if (height > 8) { height = 8; }
-
-  const char barChars[] = {' ', 0, 1, 2, 3, 4, 5, 6, (char)255};
-  display.print(barChars[height]); // Teken staaf op OLED
-}
-
-void LineFollower::showSensorReadings()
-{
-  display.clear();
-
-  // Laat staafgrafieken zien tot knop A wordt ingedrukt
-  while (!buttonA.getSingleDebouncedPress())
-  {
-    lineSensors.readCalibrated(sensorValues);
-
-    display.gotoXY(0, 0);
-    for (uint8_t i = 0; i < numSensors; i++)
-    {
-      uint8_t barHeight = map(sensorValues[i], 0, 1000, 0, 8);
-      printBar(barHeight);
-    }
-  }
-
-  display.clear();
 }

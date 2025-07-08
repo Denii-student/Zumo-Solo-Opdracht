@@ -22,12 +22,6 @@ private:
     Zumo32U4Motors motors;
     // Motorcontroller van de Zumo
 
-    Zumo32U4ButtonA buttonA;
-    // Knop A wordt gebruikt om de calibratie te starten
-
-    Zumo32U4OLED display;
-    // OLED-scherm voor weergave van sensorgegevens
-
     static const uint8_t numSensors = 5;
     // Aantal lijnsensoren op de Zumo
 
@@ -39,15 +33,6 @@ private:
 
     uint16_t maxSpeed;
     // Maximale snelheid van de motoren
-
-    void loadCustomCharacters();
-    // Laadt grafiek-symbolen in voor het OLED-scherm
-
-    void printBar(uint8_t height);
-    // Tekent één balk op het OLED-scherm (hoogte 0–8)
-
-    void showSensorReadings();
-    // Toont een live grafiek van sensorwaarden op het OLED-scherm
 };
 
 #endif

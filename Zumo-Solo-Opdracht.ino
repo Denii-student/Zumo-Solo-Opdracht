@@ -3,10 +3,10 @@
 #include "SumoBehavior.h"
 #include <Zumo32U4.h>
 
-// ✅ Gedeelde lijnsensor wordt aangemaakt in main
+//  Gedeelde lijnsensor wordt aangemaakt in main
 Zumo32U4LineSensors gedeeldeSensor;
 
-// ✅ Klassen krijgen toegang tot dezelfde sensor
+//  Klassen krijgen toegang tot dezelfde sensor
 LineFollower lijnvolger(gedeeldeSensor);
 ColorSensor kleurSensor(gedeeldeSensor);
 SumoBehavior sumoGedrag;

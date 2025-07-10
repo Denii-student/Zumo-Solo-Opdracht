@@ -67,7 +67,7 @@ void SumoBehavior::engage()
     Serial.print("Reflectie gemiddelde: ");
     Serial.println(gemiddelde);
 
-    if (gemiddelde > 700)  // Jouw grens voor zwart
+    if (gemiddelde > 700)  // Grens voor zwart
     {
       motors.setSpeeds(0, 0);
       finished = true; // Markeer als afgerond

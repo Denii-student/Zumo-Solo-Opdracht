@@ -30,7 +30,7 @@ private:
 
     uint16_t brownMin = 300;
     uint16_t brownMax = 700;
-    // Op basis van jouw metingen: gemiddelde waarde voor bruin ligt tussen 250 en 330
+    // Op basis van metingen: gemiddelde waarde voor bruin ligt tussen 250 en 330
 };
 
 #endif
